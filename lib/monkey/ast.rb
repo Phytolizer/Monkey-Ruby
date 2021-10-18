@@ -66,6 +66,7 @@ module Monkey
       # @param [Identifier] name the name being defined
       # @param [Expression] value the value being assigned
       def initialize(token, name, value)
+        super
         @token = token
         @name = name
         @value = value
@@ -95,6 +96,7 @@ module Monkey
       # @param [Token] token the identifier's token
       # @param [String] value the text of the identifier
       def initialize(token, value)
+        super
         @token = token
         @value = value
       end
