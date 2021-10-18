@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+# Lexer-specific extensions to String.
+class String
+  def letter?
+    self =~ /[a-zA-Z_]/
+  end
+end
+
 module Monkey
   # The Monkey lexer.
   #
@@ -30,6 +37,22 @@ module Monkey
       @read_position += 1
     end
 
+    def read_identifier
+      position = @position
+      read_char while @ch.letter?
+      @input[position...@position]
+    end
+
+    def read_number
+      position = @position
+      read_char while @ch =~ /[0-9]/
+      @input[position...@position]
+    end
+
+    def skip_whitespace
+      read_char while @ch =~ /[ \t\r\n]/
+    end
+
     public
 
     # Obtain the next token from the original input.
@@ -38,6 +61,8 @@ module Monkey
     # a token with type equal to {Monkey::Token::EOF}, as ignoring
     # that special token will result in an infinite loop.
     def next_token
+      skip_whitespace
+
       tok = case @ch
             when "="
               Token.new(Token::ASSIGN, @ch)
@@ -57,6 +82,15 @@ module Monkey
               Token.new(Token::PLUS, @ch)
             when "\x0"
               Token.new(Token::EOF, "")
+            when proc(&:letter?)
+              literal = read_identifier
+              type = Token.lookup_ident(literal)
+              return Token.new(type, literal)
+            when proc(&->(ch) { ch =~ /[0-9]/ })
+              literal = read_number
+              return Token.new(Token::INT, literal)
+            else
+              Token.new(Token::ILLEGAL, @ch)
             end
 
       read_char

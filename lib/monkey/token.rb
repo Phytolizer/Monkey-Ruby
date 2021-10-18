@@ -88,5 +88,17 @@ module Monkey
     #
     # `let`
     LET = :LET
+
+    class << self
+      IDENTIFIERS = {
+        "fn" => Token::FUNCTION,
+        "let" => Token::LET,
+      }.freeze
+
+      # Get the category of the given identifier/keyword.
+      def lookup_ident(ident)
+        IDENTIFIERS[ident] || Token::IDENT
+      end
+    end
   end
 end

@@ -19,6 +19,9 @@ Lint/ScriptPermission:
 Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma
 
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
 Metrics/MethodLength:
   CountAsOne:
     - array
@@ -26,4 +29,9 @@ Metrics/MethodLength:
   Max: 50
 
 Metrics/CyclomaticComplexity:
-  Max: 10
+  Max: 15
+
+Metrics/AbcSize:
+  IgnoredMethods:
+    - !ruby/regexp /_tests$/
+  Max: 25
