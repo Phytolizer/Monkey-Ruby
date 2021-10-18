@@ -35,7 +35,7 @@ module Monkey
       #
       # @param [Array<Statement>] statements the contents of the program
       def initialize(statements)
-        super
+        super()
         @statements = statements
       end
 
@@ -66,7 +66,7 @@ module Monkey
       # @param [Identifier] name the name being defined
       # @param [Expression] value the value being assigned
       def initialize(token, name, value)
-        super
+        super()
         @token = token
         @name = name
         @value = value
@@ -96,7 +96,7 @@ module Monkey
       # @param [Token] token the identifier's token
       # @param [String] value the text of the identifier
       def initialize(token, value)
-        super
+        super()
         @token = token
         @value = value
       end
