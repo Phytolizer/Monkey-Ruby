@@ -51,6 +51,35 @@ module Monkey
     #
     # `+`
     PLUS = :PLUS
+    # The logical not operator.
+    #
+    # `!`
+    BANG = :BANG
+    # The subtraction operator.
+    #
+    # `-`
+    MINUS = :MINUS
+    # The division operator.
+    #
+    # `/`
+    SLASH = :SLASH
+    # The multiplication operator.
+    #
+    # `*`
+    ASTERISK = :ASTERISK
+
+    # Comparisons
+
+    # The less-than operator.
+    #
+    # `<`
+    LT = :LT
+    # The greater-than operator.
+    #
+    # `>`
+    GT = :GT
+
+    # Delimiters
 
     # A delimiter for argument lists.
     #
@@ -89,12 +118,14 @@ module Monkey
     # `let`
     LET = :LET
 
-    class << self
-      IDENTIFIERS = {
-        "fn" => Token::FUNCTION,
-        "let" => Token::LET,
-      }.freeze
+    # The hash used by {Monkey::Token.lookup_ident} to identify keywords.
+    IDENTIFIERS = {
+      "fn" => Token::FUNCTION,
+      "let" => Token::LET,
+    }.freeze
+    private_constant :IDENTIFIERS
 
+    class << self
       # Get the category of the given identifier/keyword.
       def lookup_ident(ident)
         IDENTIFIERS[ident] || Token::IDENT
