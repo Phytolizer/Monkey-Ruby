@@ -13,6 +13,7 @@ module Monkey
       @l = lexer
       @cur_token = nil
       @peek_token = nil
+      @errors = []
 
       next_token
       next_token
@@ -38,8 +39,13 @@ module Monkey
         next_token
         true
       else
+        peek_error(type)
         false
       end
+    end
+
+    def peek_error(type)
+      @errors.push("expected next token to be #{type}, got #{@cur_token.type} instead")
     end
 
     def parse_statement
@@ -78,5 +84,7 @@ module Monkey
 
       AST::Program.new(statements)
     end
+
+    attr_reader :errors
   end
 end
