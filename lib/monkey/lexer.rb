@@ -1,12 +1,5 @@
 # frozen_string_literal: true
 
-# Lexer-specific extensions to String.
-class String
-  def letter?
-    self =~ /[a-zA-Z_]/
-  end
-end
-
 module Monkey
   # The Monkey lexer.
   #
@@ -39,7 +32,7 @@ module Monkey
 
     def read_identifier
       position = @position
-      read_char while @ch.letter?
+      read_char while @ch =~ /[a-zA-Z_]/
       @input[position...@position]
     end
 
@@ -82,7 +75,7 @@ module Monkey
               Token.new(Token::PLUS, @ch)
             when "\x0"
               Token.new(Token::EOF, "")
-            when proc(&:letter?)
+            when proc(&->(ch) { ch =~ /[a-zA-Z_]/ })
               literal = read_identifier
               type = Token.lookup_ident(literal)
               return Token.new(type, literal)

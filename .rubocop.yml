@@ -34,4 +34,4 @@ Metrics/CyclomaticComplexity:
 Metrics/AbcSize:
   IgnoredMethods:
     - !ruby/regexp /_tests$/
-  Max: 25
+  Max: 50
