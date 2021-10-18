@@ -9,6 +9,7 @@ class LexerTest < MiniTest::Test
     t = lambda do |expected_type, expected_literal|
       { expected_type: expected_type, expected_literal: expected_literal }
     end
+
     [
       t.call(Monkey::Token::ASSIGN, "="),
       t.call(Monkey::Token::PLUS, "+"),
