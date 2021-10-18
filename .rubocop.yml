@@ -18,3 +18,12 @@ Lint/ScriptPermission:
 
 Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma
+
+Metrics/MethodLength:
+  CountAsOne:
+    - array
+    - hash
+  Max: 50
+
+Metrics/CyclomaticComplexity:
+  Max: 10

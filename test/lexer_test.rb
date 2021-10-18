@@ -18,7 +18,7 @@ class LexerTest < MiniTest::Test
       t.call(Monkey::Token::LBRACE, "{"),
       t.call(Monkey::Token::RBRACE, "}"),
       t.call(Monkey::Token::COMMA, ","),
-      t.call(Monkey::Token::PLUS, "+"),
+      t.call(Monkey::Token::SEMICOLON, ";"),
     ]
   end
 
@@ -29,11 +29,15 @@ class LexerTest < MiniTest::Test
 
     l = Monkey::Lexer.new(input)
 
-    tests.each do |tt|
+    tests.each_with_index do |tt, i|
       tok = l.next_token
 
-      assert_equal tok.type, tt.expected_type
-      assert_equal tok.literal, tt.expected_literal
+      if tok.type != tt[:expected_type]
+        flunk(%(tests[#{i}] - tokentype wrong. want="#{tt[:expected_type]}", got="#{tok.type}"))
+      end
+      if tok.literal != tt[:expected_literal]
+        flunk(%(tests[#{i}] - literal wrong. want="#{tt[:expected_literal]}", got="#{tok.literal}"))
+      end
     end
   end
 end

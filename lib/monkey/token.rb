@@ -17,6 +17,11 @@ module Monkey
       @literal = literal
     end
 
+    # the token's category
+    attr_reader :type
+    # the text representing this token
+    attr_reader :literal
+
     # An illegal character in the input.
     #
     # The parser will always error when attempting to
