@@ -26,7 +26,8 @@ Metrics/MethodLength:
   CountAsOne:
     - array
     - hash
-  Max: 50
+    - heredoc
+  Max: 100
 
 Metrics/CyclomaticComplexity:
   Max: 25
@@ -38,3 +39,6 @@ Metrics/AbcSize:
 
 Metrics/ClassLength:
   Max: 500
+
+Metrics/PerceivedComplexity:
+  Max: 20

@@ -21,13 +21,17 @@ module Monkey
     private
 
     def read_char
-      @ch = if @read_position >= @input.length
-              "\x0"
-            else
-              @input[@read_position]
-            end
+      @ch = peek_char
       @position = @read_position
       @read_position += 1
+    end
+
+    def peek_char
+      if @read_position >= @input.length
+        "\x0"
+      else
+        @input[@read_position]
+      end
     end
 
     def read_identifier
@@ -58,7 +62,21 @@ module Monkey
 
       tok = case @ch
             when "="
-              Token.new(Token::ASSIGN, @ch)
+              if peek_char == "="
+                last_ch = @ch
+                read_char
+                Token.new(Token::EQ, last_ch + @ch)
+              else
+                Token.new(Token::ASSIGN, @ch)
+              end
+            when "!"
+              if peek_char == "="
+                last_ch = @ch
+                read_char
+                Token.new(Token::NOT_EQ, last_ch + @ch)
+              else
+                Token.new(Token::BANG, @ch)
+              end
             when ";"
               Token.new(Token::SEMICOLON, @ch)
             when "("
@@ -83,8 +101,6 @@ module Monkey
               Token.new(Token::LT, @ch)
             when ">"
               Token.new(Token::GT, @ch)
-            when "!"
-              Token.new(Token::BANG, @ch)
             when "\x0"
               Token.new(Token::EOF, "")
             when proc(&->(ch) { ch =~ /[a-zA-Z_]/ })

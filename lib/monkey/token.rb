@@ -78,6 +78,14 @@ module Monkey
     #
     # `>`
     GT = :GT
+    # The equality operator.
+    #
+    # `==`
+    EQ = :EQ
+    # The inequality operator.
+    #
+    # `!=`
+    NOT_EQ = :NOT_EQ
 
     # Delimiters
 

@@ -23,6 +23,9 @@ class LexerTest < MiniTest::Test
       } else {
         return false;
       }
+
+      10 == 10;
+      10 != 9;
     TEST_INPUT
   end
 
@@ -97,6 +100,14 @@ class LexerTest < MiniTest::Test
       t.call(Monkey::Token::FALSE, "false"),
       t.call(Monkey::Token::SEMICOLON, ";"),
       t.call(Monkey::Token::RBRACE, "}"),
+      t.call(Monkey::Token::INT, "10"),
+      t.call(Monkey::Token::EQ, "=="),
+      t.call(Monkey::Token::INT, "10"),
+      t.call(Monkey::Token::SEMICOLON, ";"),
+      t.call(Monkey::Token::INT, "10"),
+      t.call(Monkey::Token::NOT_EQ, "!="),
+      t.call(Monkey::Token::INT, "9"),
+      t.call(Monkey::Token::SEMICOLON, ";"),
       t.call(Monkey::Token::EOF, ""),
     ]
   end
