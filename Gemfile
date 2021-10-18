@@ -14,3 +14,5 @@ gem "rubocop-minitest"
 gem "rubocop-rake"
 
 gem "solargraph"
+
+gem "asciidoctor"

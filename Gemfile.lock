@@ -6,6 +6,7 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
+    asciidoctor (2.0.16)
     ast (2.4.2)
     backport (1.2.0)
     benchmark (0.2.0)
@@ -69,6 +70,7 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
+  asciidoctor
   minitest (~> 5.0)
   monkey!
   rake (~> 13.0)

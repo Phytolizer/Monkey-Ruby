@@ -15,3 +15,6 @@ Layout/LineLength:
 
 Lint/ScriptPermission:
   Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  EnforcedStyleForMultiline: comma
