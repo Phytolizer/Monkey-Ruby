@@ -65,53 +65,53 @@ module Monkey
               if peek_char == "="
                 last_ch = @ch
                 read_char
-                Token.new(Token::EQ, last_ch + @ch)
+                Token.new(:EQ, last_ch + @ch)
               else
-                Token.new(Token::ASSIGN, @ch)
+                Token.new(:ASSIGN, @ch)
               end
             when "!"
               if peek_char == "="
                 last_ch = @ch
                 read_char
-                Token.new(Token::NOT_EQ, last_ch + @ch)
+                Token.new(:NOT_EQ, last_ch + @ch)
               else
-                Token.new(Token::BANG, @ch)
+                Token.new(:BANG, @ch)
               end
             when ";"
-              Token.new(Token::SEMICOLON, @ch)
+              Token.new(:SEMICOLON, @ch)
             when "("
-              Token.new(Token::LPAREN, @ch)
+              Token.new(:LPAREN, @ch)
             when ")"
-              Token.new(Token::RPAREN, @ch)
+              Token.new(:RPAREN, @ch)
             when "{"
-              Token.new(Token::LBRACE, @ch)
+              Token.new(:LBRACE, @ch)
             when "}"
-              Token.new(Token::RBRACE, @ch)
+              Token.new(:RBRACE, @ch)
             when ","
-              Token.new(Token::COMMA, @ch)
+              Token.new(:COMMA, @ch)
             when "+"
-              Token.new(Token::PLUS, @ch)
+              Token.new(:PLUS, @ch)
             when "-"
-              Token.new(Token::MINUS, @ch)
+              Token.new(:MINUS, @ch)
             when "*"
-              Token.new(Token::ASTERISK, @ch)
+              Token.new(:ASTERISK, @ch)
             when "/"
-              Token.new(Token::SLASH, @ch)
+              Token.new(:SLASH, @ch)
             when "<"
-              Token.new(Token::LT, @ch)
+              Token.new(:LT, @ch)
             when ">"
-              Token.new(Token::GT, @ch)
+              Token.new(:GT, @ch)
             when "\x0"
-              Token.new(Token::EOF, "")
+              Token.new(:EOF, "")
             when proc(&->(ch) { ch =~ /[a-zA-Z_]/ })
               literal = read_identifier
               type = Token.lookup_ident(literal)
               return Token.new(type, literal)
             when proc(&->(ch) { ch =~ /[0-9]/ })
               literal = read_number
-              return Token.new(Token::INT, literal)
+              return Token.new(:INT, literal)
             else
-              Token.new(Token::ILLEGAL, @ch)
+              Token.new(:ILLEGAL, @ch)
             end
 
       read_char
