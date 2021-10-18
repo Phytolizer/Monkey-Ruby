@@ -17,6 +17,12 @@ class LexerTest < MiniTest::Test
       let result = add(five, ten);
       !-/*5;
       5 < 10 > 5;
+
+      if (5 < 10) {
+        return true;
+      } else {
+        return false;
+      }
     TEST_INPUT
   end
 
@@ -74,6 +80,23 @@ class LexerTest < MiniTest::Test
       t.call(Monkey::Token::GT, ">"),
       t.call(Monkey::Token::INT, "5"),
       t.call(Monkey::Token::SEMICOLON, ";"),
+      t.call(Monkey::Token::IF, "if"),
+      t.call(Monkey::Token::LPAREN, "("),
+      t.call(Monkey::Token::INT, "5"),
+      t.call(Monkey::Token::LT, "<"),
+      t.call(Monkey::Token::INT, "10"),
+      t.call(Monkey::Token::RPAREN, ")"),
+      t.call(Monkey::Token::LBRACE, "{"),
+      t.call(Monkey::Token::RETURN, "return"),
+      t.call(Monkey::Token::TRUE, "true"),
+      t.call(Monkey::Token::SEMICOLON, ";"),
+      t.call(Monkey::Token::RBRACE, "}"),
+      t.call(Monkey::Token::ELSE, "else"),
+      t.call(Monkey::Token::LBRACE, "{"),
+      t.call(Monkey::Token::RETURN, "return"),
+      t.call(Monkey::Token::FALSE, "false"),
+      t.call(Monkey::Token::SEMICOLON, ";"),
+      t.call(Monkey::Token::RBRACE, "}"),
       t.call(Monkey::Token::EOF, ""),
     ]
   end

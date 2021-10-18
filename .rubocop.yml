@@ -35,3 +35,6 @@ Metrics/AbcSize:
   IgnoredMethods:
     - !ruby/regexp /_tests$/
   Max: 50
+
+Metrics/ClassLength:
+  Max: 500

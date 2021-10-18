@@ -117,11 +117,36 @@ module Monkey
     #
     # `let`
     LET = :LET
+    # The "if" keyword. Begins an if expression.
+    #
+    # `if`
+    IF = :IF
+    # The "else" keyword. Begins an else clause in an if expression.
+    #
+    # `else`
+    ELSE = :ELSE
+    # The "return" keyword. Begins a return statement.
+    #
+    # `return`
+    RETURN = :RETURN
+    # The "true" keyword. Represents a truth value.
+    #
+    # `true`
+    TRUE = :TRUE
+    # The "false" keyword. Represents the opposite of {Monkey::Token::TRUE}.
+    #
+    # `false`
+    FALSE = :FALSE
 
     # The hash used by {Monkey::Token.lookup_ident} to identify keywords.
     IDENTIFIERS = {
       "fn" => Token::FUNCTION,
       "let" => Token::LET,
+      "if" => Token::IF,
+      "else" => Token::ELSE,
+      "return" => Token::RETURN,
+      "true" => Token::TRUE,
+      "false" => Token::FALSE,
     }.freeze
     private_constant :IDENTIFIERS
 
