@@ -73,6 +73,18 @@ module Monkey
               Token.new(Token::COMMA, @ch)
             when "+"
               Token.new(Token::PLUS, @ch)
+            when "-"
+              Token.new(Token::MINUS, @ch)
+            when "*"
+              Token.new(Token::ASTERISK, @ch)
+            when "/"
+              Token.new(Token::SLASH, @ch)
+            when "<"
+              Token.new(Token::LT, @ch)
+            when ">"
+              Token.new(Token::GT, @ch)
+            when "!"
+              Token.new(Token::BANG, @ch)
             when "\x0"
               Token.new(Token::EOF, "")
             when proc(&->(ch) { ch =~ /[a-zA-Z_]/ })
