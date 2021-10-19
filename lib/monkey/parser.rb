@@ -52,6 +52,8 @@ module Monkey
       case @cur_token.type
       when Token::LET
         parse_let_statement
+      when Token::RETURN
+        parse_return_statement
       end
     end
 
@@ -66,6 +68,17 @@ module Monkey
       next_token until cur_token_is(Token::SEMICOLON)
 
       AST::LetStatement.new(token, name, nil)
+    end
+
+    def parse_return_statement
+      token = @cur_token
+
+      next_token
+
+      # TODO
+      next_token until cur_token_is(Token::SEMICOLON)
+
+      AST::ReturnStatement.new(token, nil)
     end
 
     public

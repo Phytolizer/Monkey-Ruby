@@ -111,5 +111,30 @@ module Monkey
         @token.literal
       end
     end
+
+    # A return statement.
+    #
+    # `return true;`
+    class ReturnStatement < Statement
+      # Construct the return statement.
+      #
+      # @param [Token] token the "return" token
+      # @param [Expression] return_value the return value
+      def initialize(token, return_value)
+        super()
+        @token = token
+        @return_value = return_value
+      end
+
+      # The "return" token.
+      attr_reader :token
+      # The return value.
+      attr_reader :value
+
+      # Get the return statement's "token-literal".
+      def token_literal
+        @token.literal
+      end
+    end
   end
 end

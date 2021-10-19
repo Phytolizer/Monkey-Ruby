@@ -8,10 +8,10 @@ require "monkey/parser"
 
 class ParserTest < Minitest::Test
   def check_let_statement(stmt, name)
-    assert_equal stmt.token_literal, "let"
+    assert_equal("let", stmt.token_literal)
     assert_respond_to stmt, :name
-    assert_equal stmt.name.value, name
-    assert_equal stmt.name.token_literal, name
+    assert_equal(name, stmt.name.value)
+    assert_equal(name, stmt.name.token_literal)
   end
 
   def check_parser_errors(parser)
@@ -30,7 +30,7 @@ class ParserTest < Minitest::Test
     program = p.parse_program
     check_parser_errors(p)
 
-    assert_equal(program.statements.length, 3)
+    assert_equal(3, program.statements.length)
     t = lambda do |expected_identifier|
       { expected_identifier: expected_identifier }
     end
@@ -43,6 +43,25 @@ class ParserTest < Minitest::Test
     tests.each_with_index do |tt, i|
       stmt = program.statements[i]
       check_let_statement(stmt, tt[:expected_identifier])
+    end
+  end
+
+  def test_return_statements
+    input = <<~TEST_INPUT
+      return 5;
+      return 10;
+      return 993322;
+    TEST_INPUT
+
+    l = Monkey::Lexer.new(input)
+    p = Monkey::Parser.new(l)
+    program = p.parse_program
+    check_parser_errors(p)
+
+    assert_equal(3, program.statements.length)
+
+    program.statements.each do |stmt|
+      assert_equal("return", stmt.token_literal)
     end
   end
 end
