@@ -64,4 +64,20 @@ class ParserTest < Minitest::Test
       assert_equal("return", stmt.token_literal)
     end
   end
+
+  def test_identifier_expression
+    input = "foobar;"
+    l = Monkey::Lexer.new(input)
+    p = Monkey::Parser.new(l)
+    program = p.parse_program
+    check_parser_errors(p)
+
+    assert_equal(1, program.statements.length)
+    stmt = program.statements[0]
+    assert_respond_to(stmt, :expression)
+    ident = stmt.expression
+    assert_respond_to(ident, :value)
+    assert_equal("foobar", ident.value)
+    assert_equal("foobar", ident.token_literal)
+  end
 end

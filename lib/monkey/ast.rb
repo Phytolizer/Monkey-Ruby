@@ -13,6 +13,15 @@ module Monkey
       def token_literal
         raise "Unimplemented abstract method"
       end
+
+      # Get a string representation of this AST node (and all
+      # of its children).
+      #
+      # @abstract
+      # @return [String] the string representation
+      def to_s
+        raise "Unimplemented abstract method"
+      end
     end
 
     # A more specific node of the tree.
@@ -54,6 +63,19 @@ module Monkey
           @statements[0].token_literal
         end
       end
+
+      # Get the string representation of the program.
+      #
+      # Sequential statements are concatenated.
+      def string
+        result = +""
+
+        @statements.each do |s|
+          result += s.string
+        end
+
+        result
+      end
     end
 
     # A let statement.
@@ -85,6 +107,18 @@ module Monkey
       def token_literal
         @token.literal
       end
+
+      # Get a string representation of the let statement.
+      #
+      # This will look very similar to the original text.
+      def string
+        result = +"#{token_literal} "
+        result += @name.string
+        result += " = "
+        result += @value.string unless @value.nil?
+        result += ";"
+        result
+      end
     end
 
     # A single identifier.
@@ -110,6 +144,11 @@ module Monkey
       def token_literal
         @token.literal
       end
+
+      # Get the string of the identifier.
+      def string
+        @value
+      end
     end
 
     # A return statement.
@@ -134,6 +173,48 @@ module Monkey
       # Get the return statement's "token-literal".
       def token_literal
         @token.literal
+      end
+
+      # Get a string representing the return statement.
+      #
+      # This will look very similar to the original program text.
+      def string
+        result = +"#{token_literal} "
+        result += @return_value.string unless @return_value.nil?
+        result += ";"
+        result
+      end
+    end
+
+    # An expression statement.
+    #
+    # Uses an expression entirely for its side effects and
+    # discards the value.
+    class ExpressionStatement < Statement
+      # Construct the expression statement.
+      #
+      # @param [Token] token the first token of the expression
+      # @param [Expression] expression the expression
+      def initialize(token, expression)
+        super()
+        @token = token
+        @expression = expression
+      end
+
+      attr_reader :token, :expression
+
+      # Get the expression statement's "token-literal".
+      def token_literal
+        @token.literal
+      end
+
+      # Get the expression's string representation.
+      def string
+        if @expression.nil?
+          ""
+        else
+          @expression.string
+        end
       end
     end
   end

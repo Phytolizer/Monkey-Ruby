@@ -4,6 +4,17 @@ require_relative "ast"
 require_relative "token"
 
 module Monkey
+  PRECEDENCES = {
+    LOWEST: 0,
+    EQUALS: 1,
+    LESSGREATER: 2,
+    SUM: 3,
+    PRODUCT: 4,
+    PREFIX: 5,
+    CALL: 6,
+  }.freeze
+  private_constant :PRECEDENCES
+
   # The Monkey parser. Converts the {Lexer}'s tokens into a tree representation.
   class Parser
     # Initialize the parser. It will use the provided lexer.
@@ -14,6 +25,10 @@ module Monkey
       @cur_token = nil
       @peek_token = nil
       @errors = []
+      @prefix_parse_fns = {
+        IDENT: -> { parse_identifier },
+      }.freeze
+      @infix_parse_fns = {}.freeze
 
       next_token
       next_token
@@ -54,6 +69,8 @@ module Monkey
         parse_let_statement
       when Token::RETURN
         parse_return_statement
+      else
+        parse_expression_statement
       end
     end
 
@@ -79,6 +96,27 @@ module Monkey
       next_token until cur_token_is(Token::SEMICOLON)
 
       AST::ReturnStatement.new(token, nil)
+    end
+
+    def parse_expression_statement
+      token = @cur_token
+
+      expression = parse_expression(:LOWEST)
+
+      next_token if peek_token_is(:SEMICOLON)
+
+      AST::ExpressionStatement.new(token, expression)
+    end
+
+    def parse_expression(_precedence)
+      prefix = @prefix_parse_fns[@cur_token.type]
+      return nil if prefix.nil?
+
+      prefix.call
+    end
+
+    def parse_identifier
+      AST::Identifier.new(@cur_token, @cur_token.literal)
     end
 
     public
