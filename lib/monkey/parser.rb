@@ -27,6 +27,7 @@ module Monkey
       @errors = []
       @prefix_parse_fns = {
         IDENT: -> { parse_identifier },
+        INT: -> { parse_integer_literal },
       }.freeze
       @infix_parse_fns = {}.freeze
 
@@ -117,6 +118,14 @@ module Monkey
 
     def parse_identifier
       AST::Identifier.new(@cur_token, @cur_token.literal)
+    end
+
+    def parse_integer_literal
+      token = @cur_token
+
+      value = @cur_token.literal.to_i
+
+      AST::IntegerLiteral.new(token, value)
     end
 
     public

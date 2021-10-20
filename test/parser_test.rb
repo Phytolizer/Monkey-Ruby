@@ -80,4 +80,20 @@ class ParserTest < Minitest::Test
     assert_equal("foobar", ident.value)
     assert_equal("foobar", ident.token_literal)
   end
+
+  def test_integer_literal_expression
+    input = "5;"
+    l = Monkey::Lexer.new(input)
+    p = Monkey::Parser.new(l)
+    program = p.parse_program
+    check_parser_errors(p)
+
+    assert_equal(1, program.statements.length)
+    stmt = program.statements[0]
+    assert_respond_to(stmt, :expression)
+    literal = stmt.expression
+    assert_respond_to(literal, :value)
+    assert_equal(5, literal.value)
+    assert_equal("5", literal.token_literal)
+  end
 end

@@ -217,5 +217,32 @@ module Monkey
         end
       end
     end
+
+    # An integer literal.
+    #
+    # `5`
+    class IntegerLiteral < Expression
+      # Construct the integer literal.
+      #
+      # @param [Token] token the token making up the literal
+      # @param [Integer] value the integer value
+      def initialize(token, value)
+        super()
+        @token = token
+        @value = value
+      end
+
+      attr_reader :token, :value
+
+      # Get the integer literal's "token-literal".
+      def token_literal
+        @token.literal
+      end
+
+      # Get the integer literal's string representation.
+      def string
+        @token.literal
+      end
+    end
   end
 end
