@@ -28,6 +28,8 @@ module Monkey
       @prefix_parse_fns = {
         IDENT: -> { parse_identifier },
         INT: -> { parse_integer_literal },
+        BANG: -> { parse_prefix_expression },
+        MINUS: -> { parse_prefix_expression },
       }.freeze
       @infix_parse_fns = {}.freeze
 
@@ -62,6 +64,10 @@ module Monkey
 
     def peek_error(type)
       @errors.push("expected next token to be #{type}, got #{@cur_token.type} instead")
+    end
+
+    def no_prefix_parse_fn_error(type)
+      @errors.push("no prefix parse function for #{type} found")
     end
 
     def parse_statement
@@ -111,7 +117,10 @@ module Monkey
 
     def parse_expression(_precedence)
       prefix = @prefix_parse_fns[@cur_token.type]
-      return nil if prefix.nil?
+      if prefix.nil?
+        no_prefix_parse_fn_error(@cur_token.type)
+        return nil
+      end
 
       prefix.call
     end
@@ -126,6 +135,17 @@ module Monkey
       value = @cur_token.literal.to_i
 
       AST::IntegerLiteral.new(token, value)
+    end
+
+    def parse_prefix_expression
+      token = @cur_token
+      operator = @cur_token.literal
+
+      next_token
+
+      right = parse_expression(:PREFIX)
+
+      AST::PrefixExpression.new(token, operator, right)
     end
 
     public

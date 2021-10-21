@@ -244,5 +244,34 @@ module Monkey
         @token.literal
       end
     end
+
+    # A prefix expression.
+    #
+    # Consists of a string operator followed by an expression.
+    class PrefixExpression < Expression
+      # Initialize the prefix expression.
+      #
+      # @param [Token] token the operator token
+      # @param [String] operator the operator's literal
+      # @param [Expression] right the operand
+      def initialize(token, operator, right)
+        super()
+        @token = token
+        @operator = operator
+        @right = right
+      end
+
+      attr_reader :token, :operator, :right
+
+      # Get the prefix expression's operator literal.
+      def token_literal
+        @token.literal
+      end
+
+      # Get the prefix expression's string representation.
+      def string
+        "(#{@operator}#{@right.string})"
+      end
+    end
   end
 end
