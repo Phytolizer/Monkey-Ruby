@@ -4,6 +4,17 @@ require_relative "ast"
 require_relative "token"
 
 module Monkey
+  PRECEDENCES = {
+    LOWEST: 0,
+    EQUALS: 1,
+    LESSGREATER: 2,
+    SUM: 3,
+    PRODUCT: 4,
+    PREFIX: 5,
+    CALL: 6,
+  }.freeze
+  private_constant :PRECEDENCES
+
   # The Monkey parser. Converts the {Lexer}'s tokens into a tree representation.
   class Parser
     # Initialize the parser. It will use the provided lexer.
@@ -14,6 +25,13 @@ module Monkey
       @cur_token = nil
       @peek_token = nil
       @errors = []
+      @prefix_parse_fns = {
+        IDENT: -> { parse_identifier },
+        INT: -> { parse_integer_literal },
+        BANG: -> { parse_prefix_expression },
+        MINUS: -> { parse_prefix_expression },
+      }.freeze
+      @infix_parse_fns = {}.freeze
 
       next_token
       next_token
@@ -48,12 +66,18 @@ module Monkey
       @errors.push("expected next token to be #{type}, got #{@cur_token.type} instead")
     end
 
+    def no_prefix_parse_fn_error(type)
+      @errors.push("no prefix parse function for #{type} found")
+    end
+
     def parse_statement
       case @cur_token.type
       when Token::LET
         parse_let_statement
       when Token::RETURN
         parse_return_statement
+      else
+        parse_expression_statement
       end
     end
 
@@ -79,6 +103,49 @@ module Monkey
       next_token until cur_token_is(Token::SEMICOLON)
 
       AST::ReturnStatement.new(token, nil)
+    end
+
+    def parse_expression_statement
+      token = @cur_token
+
+      expression = parse_expression(:LOWEST)
+
+      next_token if peek_token_is(:SEMICOLON)
+
+      AST::ExpressionStatement.new(token, expression)
+    end
+
+    def parse_expression(_precedence)
+      prefix = @prefix_parse_fns[@cur_token.type]
+      if prefix.nil?
+        no_prefix_parse_fn_error(@cur_token.type)
+        return nil
+      end
+
+      prefix.call
+    end
+
+    def parse_identifier
+      AST::Identifier.new(@cur_token, @cur_token.literal)
+    end
+
+    def parse_integer_literal
+      token = @cur_token
+
+      value = @cur_token.literal.to_i
+
+      AST::IntegerLiteral.new(token, value)
+    end
+
+    def parse_prefix_expression
+      token = @cur_token
+      operator = @cur_token.literal
+
+      next_token
+
+      right = parse_expression(:PREFIX)
+
+      AST::PrefixExpression.new(token, operator, right)
     end
 
     public
